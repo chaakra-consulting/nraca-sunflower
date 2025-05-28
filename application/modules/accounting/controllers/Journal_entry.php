@@ -104,14 +104,20 @@ class Journal_entry extends MY_Controller {
 
         $fid_coa = $this->input->post('fid_coa');
 
-        $json_data = array(
-            "jenis_entry" => $this->input->post('jenis_entry'),
-            "tipe_kamar" => $this->input->post('tipe_kamar'),
-            "no_kamar" => $this->input->post('no_kamar'),
-            "nama_tamu" => $this->input->post('nama_tamu'),
-            "tanggal_datang" => $this->input->post('tanggal_datang'),
-            "tanggal_pergi" => $this->input->post('tanggal_pergi'),
-        );
+        if($this->input->post('jenis_entry') == "Penjualan Kamar"){
+            $json_data = array(
+                "jenis_entry" => $this->input->post('jenis_entry'),
+                "tipe_kamar" => $this->input->post('tipe_kamar'),
+                "no_kamar" => $this->input->post('no_kamar'),
+                "nama_tamu" => $this->input->post('nama_tamu'),
+                "tanggal_datang" => $this->input->post('tanggal_datang'),
+                "tanggal_pergi" => $this->input->post('tanggal_pergi'),
+            );
+        }else{
+            $json_data = array(
+                "jenis_entry" => $this->input->post('jenis_entry'),
+            );
+        }
 
         $json_data_encoded = json_encode($json_data);
         
