@@ -176,6 +176,7 @@
 
             $master_submenu_accounting = array();
             $master_submenu_accounting[] = array("name" => "Chart Of Account", "slug"=>"coa","url" => "master/coa");
+            $master_submenu_accounting[] = array("name" => "Tipe Kamar", "slug"=>"tipe_kamar","url" => "master/tipe_kamar");
             // $master_submenu_accounting[] = array("name" => "COA Balance", "slug"=>"saldoawal","url" => "master/saldoawal");
             // $master_submenu_accounting[] = array("name" => "Fixed Assets", "slug"=>"assets","url" => "master/assets");
             
@@ -186,7 +187,7 @@
 
 
             if ($is_admin || $user_type == "manager" || $user_type == "super_admin" || $user_type == "sdm" || $user_type == "admin_lap" || $user_type == "admin_kan" || $user_type == 'direktur' || $user_type == 'verifikasi') {
-                $sidebar_menu[] = array("name" => "General Master", "slug" => "", "url" => "#", "class" => "fa-list", "submenu" => $master_submenu);
+                // $sidebar_menu[] = array("name" => "General Master", "slug" => "", "url" => "#", "class" => "fa-list", "submenu" => $master_submenu);
 
             }
 
@@ -271,7 +272,7 @@
 
 
             if($is_admin || $user_type == "manager" || $user_type == "super_admin" || $user_type == "akunting" || $user_type == "manajer_keu"){
-            $sidebar_menu[] = array("name" => "Master Account", "slug"=>"","url" => "#", "class" => "fa-list", "submenu" => $master_submenu_accounting);
+            $sidebar_menu[] = array("name" => "Master", "slug"=>"","url" => "#", "class" => "fa-list", "submenu" => $master_submenu_accounting);
             
             }
             // ----- END MENU MASTER

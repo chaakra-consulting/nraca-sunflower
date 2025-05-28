@@ -46,7 +46,7 @@
 
                 {title: "Kelas Kamar"},
 
-                {title: "Platform"},
+                // {title: "Platform"},
 
                 {title: '<i class="fa fa-bars"></i>', "class": "text-center option w150"}
 

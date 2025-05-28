@@ -245,7 +245,7 @@ class Tipe_kamar extends MY_Controller
         $row_data = array(
             $data->tipe_kamar,
             $data->kelas_kamar,
-            $data->account_names
+            // $data->account_names
         );  
 
         $row_data[] = modal_anchor(get_uri("master/tipe_kamar/view"), "<i class='fa fa-eye'></i>", array("class" => "view", "title" => lang('view'), "data-post-id" => $data->id)) 

@@ -36,7 +36,7 @@
                 ?>
             </div>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label class="col-md-3">Entry Accounts & Tarif</label>
             <div class="col-md-9">
                 <div id="entry-tarif-container">
@@ -73,7 +73,7 @@
                     <?php endforeach; ?>
                 </div>
             </div>
-        </div>
+        </div> -->
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" data-dismiss="modal"><span class="fa fa-close"></span>

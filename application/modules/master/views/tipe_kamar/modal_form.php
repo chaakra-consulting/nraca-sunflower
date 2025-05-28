@@ -34,7 +34,7 @@
                 ?>
             </div>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label class="col-md-3">Entry Accounts & Tarif</label>
             <div class="col-md-9">
                 <div id="entry-tarif-container">
@@ -62,7 +62,7 @@
                 </div>
                 <button type="button" id="add-entry-tarif" class="btn btn-success btn-sm mt-2"><i class="fa fa-plus-circle"></i> Tambah</button>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 <div class="modal-footer">
@@ -71,8 +71,8 @@
         <?php echo lang('close'); ?>
     </button>
 
-    <button id="form-submit" type="button" class="btn btn-primary "><span class="fa fa-check-circle"></span>
-        <?php echo lang('save'); ?>
+    <button id="form-submit" type="submit" class="btn btn-primary" onclick="setTimeout(() => location.reload(), 1000)">
+        <span class="fa fa-check-circle"></span> <?php echo lang('save'); ?>
     </button>
 
 </div>
