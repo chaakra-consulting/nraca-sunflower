@@ -17,10 +17,13 @@
 						<td>
 							<input type="text" class="form-control" id="end_date" name="end" autocomplete="off" placeholder="END DATE" value="<?php echo $_GET['end'] ?>">
                         </td>
-                         <td><select name="paid" id="paid" class="form-control">
-                            <option value="PAID">Terbayar</option>
-                            <option value="Not Paid">Belum Bayar</option>
-                            </select></td>
+                        <td>
+	                        <select class="form-control" name="status">
+                            <option value="" <?php if($status == "") echo 'selected'; ?>>--Semua Status--</option>
+                                    <option value="1" <?php if($status === "1") echo 'selected'; ?>>Terverifikasi</option>
+                                    <option value="0" <?php if($status === "0") echo 'selected'; ?>>Belum Terverifikasi</option>
+	                        </select>
+	                    </td>
                         <td>
                             <button type="submit" name="search" class="btn btn-default" value="2"><i class=" fa fa-search"></i> Filter</button>
                             <a href="#" name="print"  class="btn btn-default" onclick="tableToExcel('table-print', 'Lap_Pembelian')"><i class=" fa fa-file-excel-o"></i> Excel</a>
@@ -47,15 +50,17 @@
             				<th style="text-align: center;">Transaction Code</th>
             				<th style="text-align: center;">Nomer Akun</th>
                             <th>Rincian</th>
+                            <th style="text-align: center; ">Status</th>
             				<th style="text-align: center;">Debet</th>
                             <th style="text-align: center;">Credit</th>
             			</tr>
             			<tbody>
             			<?php $jumlah = 0; $jumlahDebet = 0;  $jumlahCredit = 0;foreach($purchase_report as $row){ ?>
                         <tr>
-                            <td style="text-align: center;"><?php  echo $row->code; ?></td>
-                            <td style="text-align: center;"><?php  echo $row->account_number_name; ?></td>
-                            <td><?php  echo $row->description; ?></td>
+                            <td style="text-align: center;"><?php echo $row->code; ?></td>
+                            <td style="text-align: center;"><?php echo $row->account_number_name; ?></td>
+                            <td><?php echo $row->description; ?></td>
+                            <td><?php echo $row->status; ?></td>
                             <td style="text-align: center;"><?php echo to_currency($row->debet,false); $jumlahDebet += $row->debet; ?></td>
                             <td style="text-align: center;"><?php echo to_currency($row->credit,false); $jumlahCredit += $row->credit;?></td>
             			</tr>
@@ -63,7 +68,7 @@
             			</tbody>
             			<tfoot>
             				<tr>
-            					<th colspan="3" style="text-align: right;">TOTAL :</th>
+            					<th colspan="4" style="text-align: right;">TOTAL :</th>
 								<th style="text-align: center;"><?php echo to_currency($jumlahDebet, false); ?></th>
                                 <th style="text-align: center;"><?php echo to_currency($jumlahCredit); ?></th>
             				</tr>

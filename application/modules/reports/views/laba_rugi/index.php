@@ -33,6 +33,11 @@ $month=1;
 $year=date('Y');
 $type=$month;
 $project=false;
+$status="";
+
+if ($_GET['status'] === "0" ||  $_GET['status'] === "1") {
+	$status = $_GET['status'];
+}
 
 if(!empty($_GET['month'])){
     $month = $_GET['month'];
@@ -108,23 +113,17 @@ $ararymonth=array(
 
 	                        			<option value="<?php echo $a?>" <?php if ($year == $a) echo 'selected' ?>><?php echo $a?></option>
 	                        		<?php } ?>
-
 	                        	</select>
-
 	                        </td>
 
 	                        <td><select name="type" class="form-control"><option value="1" <?php if ($type == 1) echo 'selected' ?>>1 Month</option><option value="3" <?php if ($type == 3) echo 'selected' ?>>3 Month</option><option value="6" <?php if ($type == 6) echo 'selected' ?>>6 Month</option><option value="12" <?php if ($type == 12) echo 'selected' ?>>12 Month</option></select></td>
-	                        <td>
-	                        	<select class="form-control" name="project">
-	                        		<option value="">--Semua Project--</option>
-	                        		<?php foreach($data_project->result() as $r){?>
-
-	                        			<option value="<?php echo $r->id?>" <?php if($project==$r->id)echo 'selected';?>><?php echo $r->project_name?>(<?php echo $r->company_name?>)</option>
-	                        		<?php } ?>
-
-	                        	</select>
-
-	                        </td>
+							<td>
+								<select class="form-control" name="status">
+									<option value="" <?php if($status == "") echo 'selected'; ?>>--Semua Status--</option>
+									<option value="1" <?php if($status === "1") echo 'selected'; ?>>Terverifikasi</option>
+									<option value="0" <?php if($status === "0") echo 'selected'; ?>>Belum Terverifikasi</option>
+								</select>
+							</td>
 	                        <td>
 	                            <button type="submit" name="search" class="btn btn-default" value="1"><i class=" fa fa-search"></i> Filter</button>
 	                           <a href="#" name="print"  class="btn btn-default" onclick="tableToExcel('table-print', 'laba_rugi')"><i class=" fa fa-file-excel-o"></i> Excel</a>
@@ -186,7 +185,7 @@ $ararymonth=array(
 		}
 		for ($i=($month-1); $i <$loop ;$i++) {
 
-			$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project);
+			$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project,false,$status);
 			$jumlah = $jml_akun->jum_debet + $jml_akun->jum_kredit;
 				if(strlen($row->account_number)==4){
 					echo '<td class="h_kanan"><b>'.number_format(nsi_round($jumlah)).'</b></td>';
@@ -237,7 +236,7 @@ $ararymonth=array(
 					echo '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row->account_name.'</td>';
 			}
 			for ($i=($month-1); $i <$loop ;$i++) {
-				$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project);
+				$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project,false,$status);
 				$jumlah = $jml_akun->jum_debet + $jml_akun->jum_kredit;
 				if(strlen($row->account_number)==4){
 					echo '<td class="h_kanan"><b>'.number_format(nsi_round($jumlah), 0, 0, '.').'</b></td>';
@@ -290,7 +289,7 @@ $ararymonth=array(
 			}
 
 			for ($i=($month-1); $i <$loop ;$i++) {
-				$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project,$row->account_number);
+				$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project,$row->account_number,$status);
 				//echo $this->db->last_query();exit();
 				$jumlah_beban = $jml_akun->jum_debet + $jml_akun->jum_kredit;
 				if(strlen($row->account_number)==4){
@@ -345,7 +344,7 @@ $ararymonth=array(
 			}
 		for ($i=($month-1); $i <$loop ;$i++) {
 
-			$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project);
+			$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project,false,$status);
 			$jumlah = $jml_akun->jum_debet + $jml_akun->jum_kredit;
 				if(strlen($row->account_number)==4){
 					echo '<td class="h_kanan"><b>'.number_format(nsi_round($jumlah), 0, 0, '.').'</b></td>';
@@ -387,7 +386,7 @@ $ararymonth=array(
 				echo '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row->account_name.'</td>';
 			}
 			for ($i=($month-1); $i <$loop ;$i++) {
-				$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project);
+				$jml_akun = $this->Profitloss_model->get_jml_akun_month($row->id,($i+1),$year,$project,false,$status);
 				$jumlah = $jml_akun->jum_debet + $jml_akun->jum_kredit;
 				if(strlen($row->account_number)==4){
 					echo '<td class="h_kanan"><b>'.number_format(nsi_round($jumlah), 0, 0, '.').'</b></td>';

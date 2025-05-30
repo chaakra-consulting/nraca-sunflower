@@ -24,8 +24,8 @@ class Laba_rugi extends MY_Controller {
         if(!empty($_GET['start']) && !empty($_GET['end'])){
             $periode_default = $_GET['start'];
             $periode_now = $_GET['end'];
-
         }
+        // $status = $_GET['status'];
 		
 		$view_data['data_dapat'] = $this->Profitloss_model->get_data_akun_dapat();
         $view_data['data_beban_pokok'] = $this->Profitloss_model->getBebanPokokPenjualan();
@@ -34,6 +34,7 @@ class Laba_rugi extends MY_Controller {
 		$view_data['data_biaya_other'] = $this->Profitloss_model->get_data_akun_biaya_other();
 
         $view_data['data_project'] = $this->Master_Project_model->get_details();
+        // $view_data['status'] = $status;
 
         // $view_data['laba_rugi_monthly'] = $this->Profitloss_model->getMonthly();
 

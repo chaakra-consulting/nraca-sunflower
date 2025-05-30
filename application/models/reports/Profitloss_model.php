@@ -220,7 +220,7 @@ class Profitloss_model extends CI_Model {
 	}
 
 
-	function get_jml_akun_month($akun,$month,$year,$project=false,$akun_number=false) {
+	function get_jml_akun_month($akun,$month,$year,$project=false,$akun_number=false,$status="") {
 		$start=$year.'-'.$month.'-01';
 		$end=$year.'-'.$month.'-31';
 
@@ -238,8 +238,6 @@ class Profitloss_model extends CI_Model {
 				//$total_akun[]=$rw['id'];
 				
 			}
-			
-
 
 			$this->db->select('SUM(debet) AS jum_debet, SUM(credit) AS jum_kredit');
 			$this->db->from('transaction_journal');
@@ -251,6 +249,9 @@ class Profitloss_model extends CI_Model {
 			//$this->db->where_in('fid_coa', 85);
 			if($project!=false){
 				$this->db->where('project_id ', ''.$project.'');
+			}
+			if ($status === "0" || $status === "1") {
+				$this->db->where("status_pembayaran", $status);
 			}
 			//$this->db->or_where('parental', $akun);
 			//$this->db->where('fid_coa', $akun)

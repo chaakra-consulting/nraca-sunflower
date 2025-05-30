@@ -16,7 +16,8 @@ class R_purchase extends MY_Controller {
         $start = isset($_GET['start']) ? $_GET['start'] : date("Y-m-01");
         $end = isset($_GET['end']) ? $_GET['end'] : date("Y-m-d");
         $paid = isset($_GET['paid']) ? $_GET['paid'] : 'paid';
-
+		$status = $_GET['status'];
+        
         // Check if 'start' and 'end' parameters are set
         if (!isset($_GET['start']) || !isset($_GET['end'])) {
             // Redirect to reports page with default 'start' and 'end'
@@ -36,6 +37,11 @@ class R_purchase extends MY_Controller {
 			COALESCE(coa.account_name, '')
 		) AS account_number_name,
 		tj.description,
+        CASE 
+            WHEN tj.status_pembayaran = 0 THEN 'Belum Terverifikasi'
+            WHEN tj.status_pembayaran = 1 THEN 'Terverifikasi'
+            ELSE 'Tidak Diketahui'
+        END AS status,
 		tj.debet,
 		tj.credit
 		");
@@ -44,16 +50,18 @@ class R_purchase extends MY_Controller {
         $this->db->join("acc_coa_type coa", "tj.fid_coa = coa.id");
 		
 		$this->db->where("tj.type", "pengeluaran");
-		$this->db->where("tj.status_pembayaran", 1);
+		// $this->db->where("tj.status_pembayaran", 1);
 		$this->db->where("tj.date BETWEEN '$start' AND '$end'");
 		$this->db->where("tj.deleted", 0);
 		$this->db->where("tjh.deleted", 0);
+
+        if ($status === "0" || $status === "1") {
+			$this->db->where("tj.status_pembayaran", $status);
+		}
 		
 		$this->db->group_by("tj.id");
 		
         $purchase_report = $this->db->get()->result();
-        // print_r($purchase_report);
-        // exit;
 
         // Execute query using framework's database handler
         // $purchase_report = $this->db->query($sql);
@@ -61,7 +69,8 @@ class R_purchase extends MY_Controller {
         // Prepare view data
         $view_data = array(
             'date_range' => $date_range,
-            'purchase_report' => $purchase_report
+            'purchase_report' => $purchase_report,
+            'status' => $status
         );
 
         // Check if 'print' parameter is set

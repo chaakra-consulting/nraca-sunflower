@@ -16,6 +16,13 @@
                                 placeholder="END DATE" value="<?php echo isset($_GET['end']) ? $_GET['end'] : ''; ?>">
                         </td>
                         <td>
+	                        <select class="form-control" name="status">
+                            <option value="" <?php if($status == "") echo 'selected'; ?>>--Semua Status--</option>
+                                    <option value="1" <?php if($status === "1") echo 'selected'; ?>>Terverifikasi</option>
+                                    <option value="0" <?php if($status === "0") echo 'selected'; ?>>Belum Terverifikasi</option>
+	                        </select>
+	                    </td>
+                        <td>
                             <button type="submit" name="search" class="btn btn-default" value="1"><i
                                     class="fa fa-search"></i> Filter</button>
                             <a href="#" name="print" class="btn btn-default"
@@ -35,8 +42,9 @@
                             <tr>
                                 <th style="text-align: center;">Transaction Code</th>
                                 <th style="text-align: center;">Jenis Entry</th>
-                                <th style="text-align: center;">Deskripsi</th>
+                                <th style="text-align: center;width: 180px;">Deskripsi</th>
                                 <th style="text-align: center; width: 180px;">Nama Tamu / Kelas Kamar</th>
+                                <th style="text-align: center; ">Status</th>
                                 <th style="text-align: center; width: 180px;">Debet</th>
                                 <th style="text-align: center; width: 180px;">Credit</th>
                             </tr>
@@ -49,6 +57,7 @@
                                     <td><?php echo $row->jenis_entry; ?></td>
                                     <td><?php echo $row->description; ?></td>
                                     <td><?php echo $row->nama_tamu_kelas_kamar ?? '-'; ?></td>
+                                    <td><?php echo $row->status; ?></td>
                                     <td style="text-align: right;">
                                         <?php echo to_currency($row->debet, false);
                                         $jumlah_debet += $row->debet; ?>
@@ -62,7 +71,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="4" style="text-align: right;">TOTAL :</th>
+                                <th colspan="5" style="text-align: right;">TOTAL :</th>
                                 <th style="text-align: right;"><?php echo to_currency($jumlah_debet, false); ?></th>
                                 <th style="text-align: right;"><?php echo to_currency($jumlah_credit, false); ?></th>
                             </tr>

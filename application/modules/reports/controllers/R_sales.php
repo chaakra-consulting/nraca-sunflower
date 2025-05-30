@@ -16,6 +16,7 @@ class R_sales extends MY_Controller {
 		// Set default date range for the current year
 		$start = date("Y") . "-01-01";
 		$end = date("Y-m-d");
+		$status = $_GET['status'];
 
 		// Fetch and validate `start` and `end` parameters
 		if (isset($_GET['start']) && isset($_GET['end'])) {
@@ -27,6 +28,7 @@ class R_sales extends MY_Controller {
 
 		// Prepare view data
 		$view_data['date_range'] = format_to_date($start) . " - " . format_to_date($end);
+		$view_data['status'] = $status;
 
 		// Construct the query to fetch data from sales_invoices and sales_invoices_items
 		$this->db->select("
@@ -38,6 +40,11 @@ class R_sales extends MY_Controller {
 			' / ',
 			COALESCE(mtk.kelas_kamar, '-')
 		) AS nama_tamu_kelas_kamar,
+		CASE 
+			WHEN tj.status_pembayaran = 0 THEN 'Belum Terverifikasi'
+			WHEN tj.status_pembayaran = 1 THEN 'Terverifikasi'
+			ELSE 'Tidak Diketahui'
+		END AS status,
 		tj.debet,
 		tj.credit
 		");
@@ -46,10 +53,13 @@ class R_sales extends MY_Controller {
 		$this->db->join("master_tipe_kamar mtk", "JSON_UNQUOTE(JSON_EXTRACT(tjh.data, '$.tipe_kamar')) = mtk.id", "left");
 		
 		$this->db->where("tj.type", "jurnal_umum");
-		$this->db->where("tj.status_pembayaran", 1);
 		$this->db->where("tj.date BETWEEN '$start' AND '$end'");
 		$this->db->where("tj.deleted", 0);
 		$this->db->where("tjh.deleted", 0);
+
+		if ($status === "0" || $status === "1") {
+			$this->db->where("tj.status_pembayaran", $status);
+		}
 		
 		$this->db->group_by("tj.id");
 		
