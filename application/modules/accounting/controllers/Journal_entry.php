@@ -345,17 +345,24 @@ class Journal_entry extends MY_Controller {
     private function _make_row($data) {
         $originalDate = $data->date;
         $newDate = date("d-M-Y", strtotime($originalDate));
-    
-        // Determine status label based on status_pembayaran
-        // $status_label = $data->status_pembayaran == 1 
-        //     ? '<span class="label label-success">Terverifikasi</span>' 
-        //     : '<span class="label label-danger">Belum Terverifikasi</span>';
+        //$view_data['tipe_kamar'] = $this->Master_Tipe_Kamar_model->get_details(array("id"=> $data['data']['tipe_kamar']));
+        
+        $rawData = $data->data ?? null;
+        $decoded = json_decode($rawData);
+        $namaTamu = $decoded->nama_tamu ?? "-";
+
+        if($decoded->jenis_entry == 'Penjualan Kamar'){
+            $namaTamu = $decoded->nama_tamu ?? "-";
+        }else{
+            $namaTamu = "-";
+        }
     
         $code = $data->code ? anchor(get_uri('accounting/journal_entry/entry/').$data->id.'/'.$data->fid_coa, $data->code) : '-';
         $row_data = array(
             $code,
             $data->voucher_code,
             $newDate,
+            $namaTamu,
             $data->description,
             // $status_label // Add status column after description
         );

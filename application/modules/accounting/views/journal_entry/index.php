@@ -25,12 +25,13 @@
                 {title: "TRANSACTION CODE #"},
                 {title: "VOUCHER CODE"},
                 {title: "DATE"},
+                {title: "NAMA TAMU"},
                 {title: "DESCRIPTION"},
                 // {title: "STATUS"}, // Add new column for status
                 {title: '<i class="fa fa-bars"></i>', "class": "text-center option w150"}
             ],
-            printColumns: [0, 1, 2, 3, 4], // Include status column in print
-            xlsColumns: [0, 1, 2, 3, 4]   // Include status column in Excel export
+            printColumns: [0, 1, 2, 3, 4, 5], // Include status column in print
+            xlsColumns: [0, 1, 2, 3, 4, 5]   // Include status column in Excel export
         });
     });
 </script>    
