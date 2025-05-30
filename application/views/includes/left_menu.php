@@ -108,23 +108,19 @@
             // $acc_submenu[] = array("name" => "Buku Besar", "slug"=>"general_ledger","url" => "accounting/general_ledger");
             // $acc_submenu[] = array("name" => "Balance Sheet","slug"=>"neraca", "url" => "accounting/neraca");
             // $acc_submenu[] = array("name" => "Neraca Saldo", "slug"=>"neraca_saldo","url" => "accounting/neraca_saldo"); 
-            
-
             // $acc_submenu[] = array("name" => "Profit Loss Total", "slug"=>"labarugi_total","url" => "reports/labarugi_total");
             // $rpt_submenu[] = array("name" => "Profit Loss Project", "slug"=>"laba_rugi","url" => "reports/laba_rugi");
-            
+
             // $acc_submenu[] = array("name" => "Neraca","slug"=>"neraca", "url" => "accounting/neraca");
-            $acc_submenu[] = array("name" => "Laba Rugi", "slug"=>"laba_rugi","url" => "reports/laba_rugi");
             // $acc_submenu[] = array("name" => "Perubahan Modal", "slug"=>"equity","url" => "reports/equity");
-            $acc_submenu[] = array("name" => "Laporan Penjualan", "slug"=>"r_sales","url" => "reports/r_sales");
             // $acc_submenu[] = array("name" => "Laporan Piutang Dagang", "slug"=>"aging_receivable","url" => "reports/aging_receivable");
             // $acc_submenu[] = array("name" => "Laporan Hutang Dagang", "slug"=>"aging_payable","url" => "reports/aging_payable");
-            }
-            
 
+            $acc_submenu[] = array("name" => "Laporan Penjualan", "slug"=>"r_sales","url" => "reports/r_sales");
             $acc_submenu[] = array("name" => "Laporan Pembelian", "slug" => "r_purchase", "url" => "reports/r_purchase");
-
-            $sidebar_menu[] = array("name" => "Laporan Akuntansi", "slug" => "#", "url" => "#", "class" => "fa-dashboard", "submenu" => $acc_submenu);
+            $acc_submenu[] = array("name" => "Laba Rugi", "slug"=>"laba_rugi","url" => "reports/laba_rugi");
+            }
+            $sidebar_menu[] = array("name" => "Laporan Akuntansi", "slug" => "#", "url" => "#", "class" => "fa-line-chart", "submenu" => $acc_submenu);
 
             if ($is_admin || $user_type == 'manager') {
                 // $asset_submenu = array();
