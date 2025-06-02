@@ -221,8 +221,9 @@ class Profitloss_model extends CI_Model {
 
 
 	function get_jml_akun_month($akun,$month,$year,$project=false,$akun_number=false,$status="") {
-		$start=$year.'-'.$month.'-01';
-		$end=$year.'-'.$month.'-31';
+		$month = str_pad($month, 2, '0', STR_PAD_LEFT);
+		$start = $year . '-' . $month . '-01';
+		$end = date("Y-m-t", strtotime($start));
 
 			$total_akun=array();
 			if($akun!=''){
