@@ -22,8 +22,8 @@
                 //$ar_submenu[] = array("name" => "Penawaran Penjualan", "slug"=>"quotation","url" => "sales/quotation");
                 //$ar_submenu[] = array("name" => "Form Penawaran", "slug"=>"offer","url" => "sales/offer");
                 //$ar_submenu[] = array("name" => "Req Poyek", "slug"=>"order","url" => "sales/order");
-                $al_submenu[] = array("name" => "Pengeluaran", "slug" => "dashboard", "url" => "dashboard");
-                $al_submenu[] = array("name" => "Pendapatan", "slug" => "dashboard/index2", "url" => "dashboard/index2");
+                // $al_submenu[] = array("name" => "Pengeluaran", "slug" => "dashboard", "url" => "dashboard");
+                // $al_submenu[] = array("name" => "Pendapatan", "slug" => "dashboard/index2", "url" => "dashboard/index2");
                 //$ar_submenu[] = array("name" => "Surat Jalan", "slug"=>"s_suratjalan","url" => "sales/s_suratjalan");
                 //$ar_submenu[] = array("name" => "Status Proyek", "slug"=>"s_pengiriman","url" => "sales/s_pengiriman");
                 //$ar_submenu[] = array("name" => "Pembayaran Proyek", "slug"=>"s_payments","url" => "sales/s_payments");
@@ -31,7 +31,8 @@
             
                 // $ar_submenu[] = array("name" => "Penerimaaan Barang", "slug"=>"s_penerimaan","url" => "sales/s_penerimaan");
             
-                $sidebar_menu[] = array("name" => "Dasboard", "slug" => "#", "url" => "#", "class" => "fa-dashboard", "submenu" => $al_submenu);
+                // $sidebar_menu[] = array("name" => "Dasboard", "slug" => "#", "url" => "#", "class" => "fa-dashboard", "submenu" => $al_submenu);
+                $sidebar_menu[] = array("name" => "Dashboard", "slug" => "dashboard", "url" => "dashboard", "class" => "fa-dashboard");
             }
             if ($is_admin ||$user_type == "admin_lap" || $user_type == "admin_kan" || $user_type == "verifikasi" || $user_type == "manajer_keu") {
 

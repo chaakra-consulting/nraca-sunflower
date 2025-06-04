@@ -2,7 +2,7 @@
 
 <div id="page-content" class="m20 clearfix">
 
-<canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="stackedBarChart" width="300" height="300"></canvas>
 
     </div>
     <?php
@@ -39,55 +39,67 @@ if (empty($year) || !is_numeric($year)) {
 // ));
 ?>
 <script>
-   // Data untuk grafik
-    var dataFromPhp = <?= json_encode($data) ?>;
-
-    var labels = [];
-    var datasetData = [];
-
-    console.log(datasetData);
-
-    dataFromPhp.forEach(function(item) {
-        labels.push(item.month);
-        datasetData.push(item.total);
-    });
-
-    var data = {
-        labels: labels,
-        datasets: [{
-            label: "Total Pengeluaran",
-            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#FF9800", "#9C27B0", "#795548", "#2196F3", "#FF5722", "#607D8B", "#E91E63", "#FFEB3B"],
-            data: datasetData
-        }]
-    };
-
-    // Pengaturan grafik
-    var options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function (context) {
-                        var value = context.raw || 0;
-                        var formattedValue = new Intl.NumberFormat('id-ID').format(value);
-                        return "Total Pengeluaran: Rp." + formattedValue;
-                    }
+    const ctx = document.getElementById('stackedBarChart').getContext('2d');
+    const stackedBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($months) ?>,
+            datasets: [
+                {
+                    label: 'Entry - Debet',
+                    data: <?= json_encode($entryDebet) ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    stack: 'Entry'
+                },
+                {
+                    label: 'Entry - Credit',
+                    data: <?= json_encode($entryCredit) ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    stack: 'Entry'
+                },
+                {
+                    label: 'Expense - Debet',
+                    data: <?= json_encode($expenseDebet) ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    stack: 'Expense'
+                },
+                {
+                    label: 'Expense - Credit',
+                    data: <?= json_encode($expenseCredit) ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    stack: 'Expense'
+                },
+                {
+                    label: 'Laba Rugi - Debet',
+                    data: <?= json_encode($labaRugiDebet) ?>,
+                    backgroundColor: 'rgba(60, 99, 132, 1)',
+                    stack: 'Laba'
+                },
+                {
+                    label: 'Laba Rugi - Credit',
+                    data: <?= json_encode($labaRugiCredit) ?>,
+                    backgroundColor: 'rgba(60, 99, 132, 0.6)',
+                    stack: 'Laba'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Chart'
+                },
+            },
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true
                 }
             }
         }
-    };
-
-    // Ambil elemen canvas
-    var ctx = document.getElementById("myChart").getContext("2d");
-
-    // Buat grafik
-    var myChart = new Chart(ctx, {
-        type: 'bar', // Jenis grafik (bisa diganti dengan jenis lainnya)
-        data: data,
-        options: options
     });
 </script>
-
-
-

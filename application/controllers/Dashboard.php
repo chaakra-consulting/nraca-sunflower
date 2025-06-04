@@ -18,46 +18,118 @@ class Dashboard extends MY_Controller
      */
     public function index()
     {
-        // Get the year from GET parameter or default to current year
+        $status = $this->input->get('status');
         $year = $this->input->get('search');
         if (empty($year) || !is_numeric($year)) {
             $year = date('Y');
         }
-
-        // Prepare query for total purchases per month for the selected year
-        $query = $this->db->query("
-            SELECT 
-                DATE_FORMAT(pi.inv_date, '%M') AS month_name,
-                MONTH(pi.inv_date) AS month_number,
-                YEAR(pi.inv_date) AS year,
-                SUM(pii.total) AS total_per_month
-            FROM 
-                purchase_invoices pi
-            JOIN 
-                purchase_invoices_items pii ON pi.id = pii.fid_invoices
-            WHERE 
-                YEAR(pi.inv_date) = ?
-                AND pi.paid = 'PAID'
-                AND pi.code != '506 - Gaji'
-                AND pi.deleted = 0
-            GROUP BY 
-                month_name, month_number, year
-            ORDER BY 
-                year, month_number
-        ", array($year));
-
-        // Prepare the data for the view
-        $data = [];
-        foreach ($query->result() as $row) {
-            $data[] = [
-                'month' => $row->month_name,
-                'total' => $row->total_per_month
-            ];
+    
+        $entryDebet = [];
+        $entryCredit = [];
+        $expenseDebet = [];
+        $expenseCredit = [];
+        $labaRugiDebet = [];
+        $labaRugiCredit = [];
+        $months = [];
+    
+        // Loop bulan 1 sampai 12
+        for ($m = 1; $m <= 12; $m++) {
+            $monthName = date("F", mktime(0, 0, 0, $m, 1));
+            
+            // Ambil jurnal_umum
+            $this->db->select("SUM(tj.debet) AS total_debet, SUM(tj.credit) AS total_credit");
+            $this->db->from("transaction_journal tj");
+            $this->db->join("transaction_journal_header tjh", "tj.fid_header = tjh.id", "inner");
+            $this->db->where("tj.type", "jurnal_umum");
+            $this->db->where("YEAR(tj.date)", $year);
+            $this->db->where("MONTH(tj.date)", $m);
+            $this->db->where("tj.deleted", 0);
+            $this->db->where("tjh.deleted", 0);
+            if ($status === "0" || $status === "1") {
+                $this->db->where("tj.status_pembayaran", $status);
+            }
+            $entryResult = $this->db->get()->row();
+    
+            // Ambil pengeluaran
+            $this->db->select("SUM(tj.debet) AS total_debet, SUM(tj.credit) AS total_credit");
+            $this->db->from("transaction_journal tj");
+            $this->db->join("transaction_journal_header tjh", "tj.fid_header = tjh.id", "inner");
+            $this->db->where("tj.type", "pengeluaran");
+            $this->db->where("YEAR(tj.date)", $year);
+            $this->db->where("MONTH(tj.date)", $m);
+            $this->db->where("tj.deleted", 0);
+            $this->db->where("tjh.deleted", 0);
+            if ($status === "0" || $status === "1") {
+                $this->db->where("tj.status_pembayaran", $status);
+            }
+            $expenseResult = $this->db->get()->row();
+    
+            // Simpan hasil
+            $months[] = $monthName;
+            $entryDebet[] = $entryResult->total_debet ?? 0;
+            $entryCredit[] = $entryResult->total_credit ?? 0;
+            $expenseDebet[] = $expenseResult->total_debet ?? 0;
+            $expenseCredit[] = $expenseResult->total_credit ?? 0;
+            $labaRugiDebet[] = ($entryResult->total_debet ?? 0) - ($expenseResult->total_debet ?? 0);
+            $labaRugiCredit[] = ($entryResult->total_credit ?? 0) - ($expenseResult->total_credit ?? 0);
         }
-
-        // Load the view with the data
-        $this->template->rander("dashboard/index", ['data' => $data]);
+        // print_r($labaRugiCredit);
+        // exit;
+        // Kirim ke view
+        $this->template->rander("dashboard/index", [
+            'months' => $months,
+            'entryDebet' => $entryDebet,
+            'entryCredit' => $entryCredit,
+            'expenseDebet' => $expenseDebet,
+            'expenseCredit' => $expenseCredit,
+            'labaRugiDebet' => $labaRugiDebet,
+            'labaRugiCredit' => $labaRugiCredit,
+        ]);
     }
+    
+    
+    // public function index()
+    // {
+    //     // Get the year from GET parameter or default to current year
+    //     $year = $this->input->get('search');
+    //     if (empty($year) || !is_numeric($year)) {
+    //         $year = date('Y');
+    //     }
+
+    //     // Prepare query for total purchases per month for the selected year
+    //     $query = $this->db->query("
+    //         SELECT 
+    //             DATE_FORMAT(pi.inv_date, '%M') AS month_name,
+    //             MONTH(pi.inv_date) AS month_number,
+    //             YEAR(pi.inv_date) AS year,
+    //             SUM(pii.total) AS total_per_month
+    //         FROM 
+    //             purchase_invoices pi
+    //         JOIN 
+    //             purchase_invoices_items pii ON pi.id = pii.fid_invoices
+    //         WHERE 
+    //             YEAR(pi.inv_date) = ?
+    //             AND pi.paid = 'PAID'
+    //             AND pi.code != '506 - Gaji'
+    //             AND pi.deleted = 0
+    //         GROUP BY 
+    //             month_name, month_number, year
+    //         ORDER BY 
+    //             year, month_number
+    //     ", array($year));
+
+    //     // Prepare the data for the view
+    //     $data = [];
+    //     foreach ($query->result() as $row) {
+    //         $data[] = [
+    //             'month' => $row->month_name,
+    //             'total' => $row->total_per_month
+    //         ];
+    //     }
+
+    //     // Load the view with the data
+    //     $this->template->rander("dashboard/index", ['data' => $data]);
+    // }
 
     public function index2()
     {
