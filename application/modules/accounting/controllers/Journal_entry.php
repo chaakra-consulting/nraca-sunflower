@@ -345,8 +345,16 @@ class Journal_entry extends MY_Controller {
     private function _make_row($data) {
         $originalDate = $data->date;
         $newDate = date("d M Y", strtotime($originalDate));
-        //$view_data['tipe_kamar'] = $this->Master_Tipe_Kamar_model->get_details(array("id"=> $data['data']['tipe_kamar']));
-        
+
+        $journals = $this->Journal_model->get_details(array('fid_header' => $data->id))->result();
+        $show_verifikasi = false;
+        foreach ($journals as $j) {
+            if ($j->status_pembayaran == 0) {
+                $show_verifikasi = true;
+                break;
+            }
+        }
+
         $rawData = $data->data ?? null;
         $decoded = json_decode($rawData);
         $namaTamu = $decoded->nama_tamu ?? "-";
@@ -375,12 +383,39 @@ class Journal_entry extends MY_Controller {
             // $status_label // Add status column after description
         );
     
-        $row_data[] = anchor(get_uri("accounting/journal_entry/entry/").$data->id.'/'.$data->fid_coa, "<i class='fa fa-plus'></i>", array("class" => "edit", "title" => "Add Entry", "data-post-id" => $data->id))
-            . modal_anchor(get_uri("accounting/journal_entry/modal_form_edit"), "<i class='fa fa-pencil'></i>", array("class" => "edit", "title" => lang('edit_client'), "data-post-id" => $data->id))
-            . js_anchor("<i class='fa fa-times fa-fw'></i>", array('title' => lang('delete_client'), "class" => "delete", "data-id" => $data->id, "data-action-url" => get_uri("accounting/journal_entry/delete"), "data-action" => "delete"));
+        $actions = anchor(get_uri("accounting/journal_entry/entry/") . $data->id . '/' . $data->fid_coa, "<i class='fa fa-plus'></i>", array("class" => "edit", "title" => "Add Entry", "data-post-id" => $data->id))
+        . modal_anchor(get_uri("accounting/journal_entry/modal_form_edit"), "<i class='fa fa-pencil'></i>", array("class" => "edit", "title" => lang('edit_client'), "data-post-id" => $data->id))
+        . js_anchor("<i class='fa fa-times fa-fw'></i>", array('title' => lang('delete_client'), "class" => "delete", "data-id" => $data->id, "data-action-url" => get_uri("accounting/journal_entry/delete"), "data-action" => "delete"));
+        
+        if ($show_verifikasi) {
+            $actions .= anchor(get_uri("accounting/journal_entry/verifikasi/") . $data->id, "<i class='fa fa-check'></i>", array("class" => "view", "title" => "Verifikasi Pembayaran", "data-post-id" => $data->id));
+        }
+        
+        $row_data[] = $actions;
     
         return $row_data;
     }
+
+    public function verifikasi($id_header = null)
+        {
+            if (!$id_header) {
+                show_404();
+            }
+
+            $journals = $this->Journal_model->get_details(array('fid_header' => $id_header))->result();
+
+            if (empty($journals)) {
+                $this->session->set_flashdata('error', 'Data jurnal tidak ditemukan.');
+                redirect('accounting/journal_entry');
+            }
+
+            foreach ($journals as $j) {
+                $this->Journal_model->verifikasi($j->id);
+            }
+
+            $this->session->set_flashdata('success', 'Status pembayaran berhasil diverifikasi.');
+            redirect('accounting/journal_entry');
+        }
 
     // private function _make_row($data) {
     //     // $options = array(

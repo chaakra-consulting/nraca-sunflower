@@ -44,4 +44,8 @@ class Journal_model extends Crud_model {
         return $data;
     }
 
+    public function verifikasi($id){
+        $query = $this->db->query("UPDATE $this->table SET status_pembayaran='1' where id='$id' ");
+        //return $query->result_array();
+    }
 }
