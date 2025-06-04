@@ -344,7 +344,7 @@ class Journal_entry extends MY_Controller {
 
     private function _make_row($data) {
         $originalDate = $data->date;
-        $newDate = date("d-M-Y", strtotime($originalDate));
+        $newDate = date("d M Y", strtotime($originalDate));
         //$view_data['tipe_kamar'] = $this->Master_Tipe_Kamar_model->get_details(array("id"=> $data['data']['tipe_kamar']));
         
         $rawData = $data->data ?? null;
@@ -353,8 +353,14 @@ class Journal_entry extends MY_Controller {
 
         if($decoded->jenis_entry == 'Penjualan Kamar'){
             $namaTamu = $decoded->nama_tamu ?? "-";
+            $tanggalDatang = date("d M Y", strtotime($decoded->tanggal_datang)) ?? "";
+            $tanggalPergi = date("d M Y", strtotime($decoded->tanggal_pergi)) ?? "";
+            // $tanggalKamar = $tanggalDatang. " - " .$tanggalPergi;
         }else{
             $namaTamu = "-";
+            $tanggalDatang = "-";
+            $tanggalPergi = "-";
+            // $tanggalKamar = "-";
         }
     
         $code = $data->code ? anchor(get_uri('accounting/journal_entry/entry/').$data->id.'/'.$data->fid_coa, $data->code) : '-';
@@ -363,6 +369,8 @@ class Journal_entry extends MY_Controller {
             $data->voucher_code,
             $newDate,
             $namaTamu,
+            $tanggalDatang,
+            $tanggalPergi,
             $data->description,
             // $status_label // Add status column after description
         );

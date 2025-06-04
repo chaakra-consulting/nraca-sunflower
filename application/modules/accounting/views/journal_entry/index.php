@@ -22,11 +22,13 @@
         $("#expenses-table").appTable({
             source: '<?php echo_uri("accounting/journal_entry/list_data") ?>',
             columns: [
-                {title: "TRANSACTION CODE #"},
-                {title: "VOUCHER CODE"},
-                {title: "DATE"},
-                {title: "NAMA TAMU"},
-                {title: "DESCRIPTION"},
+                {title: "Transaction Code #"},
+                {title: "Voucher Code"},
+                {title: "Date"},
+                {title: "Nama Tamu"},
+                {title: "Tanggal Datang"},
+                {title: "Tanggal Pergi"},
+                {title: "Deskripsi"},
                 // {title: "STATUS"}, // Add new column for status
                 {title: '<i class="fa fa-bars"></i>', "class": "text-center option w150"}
             ],
