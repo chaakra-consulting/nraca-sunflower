@@ -34,7 +34,7 @@ class R_sales extends MY_Controller {
 		$this->db->select("
 		tjh.code AS transaction_code,
 		JSON_UNQUOTE(JSON_EXTRACT(tjh.data, '$.jenis_entry')) AS jenis_entry,
-		tj.description,
+		CONCAT(coa.account_number, ' - ', coa.account_name) AS account,
 		CONCAT(
 			COALESCE(JSON_UNQUOTE(JSON_EXTRACT(tjh.data, '$.nama_tamu')), '-'),
 			' / ',
@@ -50,6 +50,7 @@ class R_sales extends MY_Controller {
 		");
 		$this->db->from("transaction_journal tj");
 		$this->db->join("transaction_journal_header tjh", "tj.fid_header = tjh.id", "inner");
+		$this->db->join("acc_coa_type coa", "tj.fid_coa = coa.id", "left");
 		$this->db->join("master_tipe_kamar mtk", "JSON_UNQUOTE(JSON_EXTRACT(tjh.data, '$.tipe_kamar')) = mtk.id", "left");
 		
 		$this->db->where("tj.type", "jurnal_umum");

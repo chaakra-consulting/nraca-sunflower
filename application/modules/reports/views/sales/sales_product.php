@@ -42,7 +42,7 @@
                             <tr>
                                 <th style="text-align: center;">Transaction Code</th>
                                 <th style="text-align: center;">Jenis Entry</th>
-                                <th style="text-align: center;width: 180px;">Deskripsi</th>
+                                <th style="text-align: center; width: 180px;">Account</th>
                                 <th style="text-align: center; width: 180px;">Nama Tamu / Kelas Kamar</th>
                                 <th style="text-align: center; ">Status</th>
                                 <th style="text-align: center; width: 180px;">Debet</th>
@@ -55,7 +55,7 @@
                                 <tr>
                                     <td><?php echo $row->transaction_code ?? '-'; ?></td>
                                     <td><?php echo $row->jenis_entry; ?></td>
-                                    <td><?php echo $row->description; ?></td>
+                                    <td style="text-align: center;"><?php echo $row->account; ?></td>
                                     <td><?php echo $row->nama_tamu_kelas_kamar ?? '-'; ?></td>
                                     <td><?php echo $row->status; ?></td>
                                     <td style="text-align: right;">
@@ -89,7 +89,7 @@
         setDatePicker("#end_date");
 
         $('#table-print').DataTable({
-            "order": [[2, "desc"]], // Default sorting by total amount in descending order
+            "order": [[0, "desc"]], // Default sorting by total amount in descending order
             "columnDefs": [
                 {"targets": [0, 1], "type": "string"},
                 {"targets": [2, 3], "type": "num-fmt", "orderSequence": ["desc", "asc"]}
