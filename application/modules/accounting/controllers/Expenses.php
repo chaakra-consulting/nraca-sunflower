@@ -102,7 +102,7 @@ class Expenses extends MY_Controller {
             "code" => $this->input->post('code'),
             "voucher_code" => $this->input->post('voucher_code'),
             "fid_coa" => $this->input->post('fid_coa'),
-            "fid_project" => $this->input->post('fid_project'),
+            "fid_project" => $this->input->post('fid_project') ?? 0,
             "date" => $this->input->post('date'),
             "description" => $this->input->post('description'),
             "status" => 1,
