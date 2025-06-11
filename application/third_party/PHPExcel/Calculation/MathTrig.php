@@ -1212,7 +1212,8 @@ class PHPExcel_Calculation_MathTrig
             $testCondition = '='.$arg.$condition;
             if (PHPExcel_Calculation::getInstance()->_calculateFormulaValue($testCondition)) {
                 // Is it a value within our criteria
-                $returnValue += $sumArgs[$key];
+                // $returnValue += $sumArgs[$key];
+                $returnValue += is_numeric($sumArgs[$key]) ? (float)$sumArgs[$key] : 0;
             }
         }
 
