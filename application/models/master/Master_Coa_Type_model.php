@@ -34,6 +34,38 @@ class Master_Coa_Type_model extends Crud_model {
         return $data;
     }
 
+    function get_details_row($options = array()){
+        $id = get_array_value($options, "id");
+        $parent = get_array_value($options, "parent");
+        $no_parent = get_array_value($options, "no_parent");
+        $kas_bank = get_array_value($options, "kas_bank");
+        $account_name = get_array_value($options, "account_name");
+        
+        $where = "";
+        if ($id) {
+            $where = " AND id=$id";
+        }
+        if ($parent) {
+            $where = " AND parent='$parent'";
+        }
+
+        if ($no_parent) {
+            $where = " AND parent=$no_parent";
+        }
+
+        if($kas_bank){
+            $where = " AND id in ($kas_bank)";
+        }
+
+        if ($account_name) {
+            $where .= " AND account_name LIKE " . $this->db->escape('%' . $account_name . '%');
+        }
+        
+        $data = $this->db->query("SELECT * FROM $this->table WHERE  deleted = 0  ".$where." ORDER BY id ASC")->row_array();
+        // print_r($data);
+        // exit;
+        return $data;
+    }
 
     // function getListCoa(){
 

@@ -11,9 +11,14 @@ class Master_Tipe_Kamar_model extends Crud_model {
 
     function get_details($options = array()){
         $id = get_array_value($options, "id");
+        $tipe_kamar = get_array_value($options, "tipe_kamar");
         $where = "";
         if ($id) {
             $where = " AND mtk.id=$id";
+        }
+
+        if ($tipe_kamar) {
+            $where = " AND mtk.tipe_kamar='$tipe_kamar'";
         }
     
         $sql = "SELECT 

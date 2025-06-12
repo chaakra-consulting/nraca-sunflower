@@ -18,7 +18,9 @@ class Journal_entry extends MY_Controller {
     	$this->template->rander('journal_entry/index');
     }
 
-
+    function modal_form_import() {
+        $this->load->view('journal_entry/modal_form_import');
+    }
 
     
     function modal_form() {
