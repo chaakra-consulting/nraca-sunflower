@@ -61,16 +61,16 @@
                             <td style="text-align: center;"><?php echo $row->account_number_name; ?></td>
                             <td><?php echo $row->description; ?></td>
                             <td><?php echo $row->status; ?></td>
-                            <td style="text-align: center;"><?php echo to_currency($row->debet,false); $jumlahDebet += $row->debet; ?></td>
-                            <td style="text-align: center;"><?php echo to_currency($row->credit,false); $jumlahCredit += $row->credit;?></td>
+                            <td style="text-align: center;"><?php echo number_format(nsi_round($row->debet), 0, 0, '.'); $jumlahDebet += $row->debet; ?></td>
+                            <td style="text-align: center;"><?php echo number_format(nsi_round($row->credit), 0, 0, '.'); $jumlahCredit += $row->credit;?></td>
             			</tr>
             			<?php } ?>
             			</tbody>
             			<tfoot>
             				<tr>
             					<th colspan="4" style="text-align: right;">TOTAL :</th>
-								<th style="text-align: center;"><?php echo to_currency($jumlahDebet, false); ?></th>
-                                <th style="text-align: center;"><?php echo to_currency($jumlahCredit); ?></th>
+								<th style="text-align: center;"><?php echo number_format(nsi_round($jumlahDebet), 0, 0, '.'); ?></th>
+                                <th style="text-align: center;"><?php echo number_format(nsi_round($jumlahCredit), 0, 0, '.'); ?></th>
             				</tr>
             			</tfoot>
             		</table>

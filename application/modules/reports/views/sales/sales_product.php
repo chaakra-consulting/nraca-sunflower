@@ -59,11 +59,11 @@
                                     <td><?php echo $row->nama_tamu_kelas_kamar ?? '-'; ?></td>
                                     <td><?php echo $row->status; ?></td>
                                     <td style="text-align: right;">
-                                        <?php echo to_currency($row->debet, false);
+                                        <?php echo number_format(nsi_round($row->debet), 0, 0, '.');
                                         $jumlah_debet += $row->debet; ?>
                                     </td>
                                     <td style="text-align: right;">
-                                        <?php echo to_currency($row->credit, false);
+                                        <?php echo number_format(nsi_round($row->credit), 0, 0, '.');
                                         $jumlah_credit += $row->credit; ?>
                                     </td>
                                 </tr>
@@ -72,8 +72,8 @@
                         <tfoot>
                             <tr>
                                 <th colspan="5" style="text-align: right;">TOTAL :</th>
-                                <th style="text-align: right;"><?php echo to_currency($jumlah_debet, false); ?></th>
-                                <th style="text-align: right;"><?php echo to_currency($jumlah_credit, false); ?></th>
+                                <th style="text-align: right;"><?php echo number_format(nsi_round($jumlah_debet), 0, 0, '.'); ?></th>
+                                <th style="text-align: right;"><?php echo number_format(nsi_round($jumlah_credit), 0, 0, '.'); ?></th>
                             </tr>
                         </tfoot>
                     </table>
