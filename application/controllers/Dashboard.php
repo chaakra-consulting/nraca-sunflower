@@ -19,6 +19,7 @@ class Dashboard extends MY_Controller
     public function index()
     {
         $status = $this->input->get('status');
+        $stack = $this->input->get('stack');
         $year = $this->input->get('search');
         if (empty($year) || !is_numeric($year)) {
             $year = date('Y');
@@ -30,6 +31,7 @@ class Dashboard extends MY_Controller
         $expenseCredit = [];
         $labaRugiDebet = [];
         $labaRugiCredit = [];
+        $labaRugi = [];
         $months = [];
     
         // Loop bulan 1 sampai 12
@@ -72,19 +74,47 @@ class Dashboard extends MY_Controller
             $expenseCredit[] = $expenseResult->total_credit ?? 0;
             $labaRugiDebet[] = ($entryResult->total_debet ?? 0) - ($expenseResult->total_debet ?? 0);
             $labaRugiCredit[] = ($entryResult->total_credit ?? 0) - ($expenseResult->total_credit ?? 0);
+            $labaRugi[] = ( ($entryResult->total_credit ?? 0) + ($entryResult->total_debet ?? 0) ) - ( ($expenseResult->total_debet ?? 0) + ($expenseResult->total_credit ?? 0) );
         }
-        // print_r($labaRugiCredit);
-        // exit;
-        // Kirim ke view
-        $this->template->rander("dashboard/index", [
-            'months' => $months,
-            'entryDebet' => $entryDebet,
-            'entryCredit' => $entryCredit,
-            'expenseDebet' => $expenseDebet,
-            'expenseCredit' => $expenseCredit,
-            'labaRugiDebet' => $labaRugiDebet,
-            'labaRugiCredit' => $labaRugiCredit,
-        ]);
+
+        switch($stack){
+            case'pembelian':
+                $this->template->rander("dashboard/index-pembelian", [
+                    'months' => $months,
+                    'entryDebet' => $entryDebet,
+                    'entryCredit' => $entryCredit,
+                    'expenseDebet' => $expenseDebet,
+                    'expenseCredit' => $expenseCredit,
+                    'labaRugiDebet' => $labaRugiDebet,
+                    'labaRugiCredit' => $labaRugiCredit,
+                    'labaRugi' => $labaRugi,
+                ]);
+                break;
+            case'penjualan':
+                $this->template->rander("dashboard/index-penjualan", [
+                    'months' => $months,
+                    'entryDebet' => $entryDebet,
+                    'entryCredit' => $entryCredit,
+                    'expenseDebet' => $expenseDebet,
+                    'expenseCredit' => $expenseCredit,
+                    'labaRugiDebet' => $labaRugiDebet,
+                    'labaRugiCredit' => $labaRugiCredit,
+                    'labaRugi' => $labaRugi,
+                ]);
+                break;
+            default:
+                $this->template->rander("dashboard/index", [
+                    'months' => $months,
+                    'entryDebet' => $entryDebet,
+                    'entryCredit' => $entryCredit,
+                    'expenseDebet' => $expenseDebet,
+                    'expenseCredit' => $expenseCredit,
+                    'labaRugiDebet' => $labaRugiDebet,
+                    'labaRugiCredit' => $labaRugiCredit,
+                    'labaRugi' => $labaRugi,
+                ]);
+                break;
+        }
     }
     
     

@@ -21,10 +21,10 @@ if (empty($year) || !is_numeric($year)) {
             <?php endfor ?>
         </select>
     </div>
-    <input type="hidden" name="stack" value="labarugi">
+    <input type="hidden" name="stack" value="pembelian">
     <div class="mt-2">
         <button type="submit" class="btn btn-primary">Cari</button>
-        <a href="<?= base_url("Dashboard?stack=labarugi"); ?>" class="btn btn-success">Reload</a>
+        <a href="<?= base_url("Dashboard?stack=pembelian"); ?>" class="btn btn-success">Reload</a>
     </div>
 </form>
 <?php
@@ -46,10 +46,16 @@ const stackedBarChart = new Chart(ctx, {
         labels: <?= json_encode($months) ?>,
         datasets: [
             {
-                label: 'Laba Rugi',
-                data: <?= json_encode($labaRugi) ?>,
-                backgroundColor: 'rgba(60, 99, 132, 1)',
-                stack: 'Laba'
+                label: 'Debet',
+                data: <?= json_encode($expenseDebet) ?>,
+                backgroundColor: 'rgba(255, 99, 132, 1)',
+                stack: 'Expense'
+            },
+            {
+                label: 'Credit',
+                data: <?= json_encode($expenseCredit) ?>,
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                stack: 'Expense'
             },
         ]
     },
