@@ -56,7 +56,7 @@ class Profitloss_model extends CI_Model {
 	}
 
 	function getBebanPokokPenjualan(){
-		$query = $this->db->query("SELECT * FROM `acc_coa_type` WHERE `deleted` = 0 AND account_type = '0Harga Pokok Penjualan' AND parent IS NULL ORDER BY account_number ASC");
+		$query = $this->db->query("SELECT * FROM `acc_coa_type` WHERE `deleted` = 0 AND account_type = 'Harga Pokok Penjualan' AND parent IS NULL ORDER BY account_number ASC");
 		if($query->num_rows() > 0) {
 			$out = $query->result();
 			return $out;
@@ -198,12 +198,28 @@ class Profitloss_model extends CI_Model {
 
 		}	
 	function get_jml_akun($akun,$start,$end) {
-			
 
-			$this->db->select('SUM(debet) AS jum_debet, SUM(credit) AS jum_kredit');
-			$this->db->from('transaction_journal');
-			
+		$this->db->select('SUM(debet) AS jum_debet, SUM(credit) AS jum_kredit');
+		$this->db->from('transaction_journal');
+		$this->db->where('DATE(date) >=', $start);
+		$this->db->where('DATE(date) <=', $end);
+		$this->db->where('deleted', '0');
+	
+		if (!empty($akun)) {
+			if (is_array($akun)) {
+				$this->db->where_in('fid_coa', $akun);
+			} else {
+				$this->db->where('fid_coa', $akun);
+			}
+		}
+	
+		$query = $this->db->get();
 
+		return $query->row();
+		// $total_akun=array();
+		// if($akun!=''){
+		// 	$total_akun[]=$akun;
+		// }
 		// 	if(isset($_REQUEST['tgl_dari']) && isset($_REQUEST['tgl_samp'])) {
 		// 	$tgl_dari = $_REQUEST['tgl_dari'];
 		// 	$tgl_samp = $_REQUEST['tgl_samp'];
@@ -211,12 +227,6 @@ class Profitloss_model extends CI_Model {
 		// 	$tgl_dari = date('Y') . '-01-01';
 		// 	$tgl_samp = date('Y') . '-12-31';
 		// }
-		$this->db->where('DATE(date) >= ', ''.$start.'');
-		$this->db->where('DATE(date) <= ', ''.$end.'');
-		$this->db->where('deleted ', '0');
-
-		$query = $this->db->get();
-		return $query->row();
 	}
 
 

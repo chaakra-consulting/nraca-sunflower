@@ -17,6 +17,7 @@ class R_sales extends MY_Controller {
 		$start = date("Y") . "-01-01";
 		$end = date("Y-m-d");
 		$status = $_GET['status'];
+		$acc_filter = $_GET['acc_filter'];
 
 		// Fetch and validate `start` and `end` parameters
 		if (isset($_GET['start']) && isset($_GET['end'])) {
@@ -29,6 +30,7 @@ class R_sales extends MY_Controller {
 		// Prepare view data
 		$view_data['date_range'] = format_to_date($start) . " - " . format_to_date($end);
 		$view_data['status'] = $status;
+		$view_data['acc_filter'] = $acc_filter;
 
 		// Construct the query to fetch data from sales_invoices and sales_invoices_items
 		$this->db->select("
@@ -61,9 +63,14 @@ class R_sales extends MY_Controller {
 		if ($status === "0" || $status === "1") {
 			$this->db->where("tj.status_pembayaran", $status);
 		}
+
+		if($acc_filter){
+			$this->db->where("tj.fid_coa", $acc_filter);
+		}
 		
 		$this->db->group_by("tj.id");
-		
+
+		$view_data['acc_dropdown'] = $this->Master_Coa_Type_model->getCoaEntry();
 		$view_data['sales_report'] = $this->db->get()->result();
 
 		// $this->db->select("CONCAT(JSON_EXTRACT(data, '$.nama_tamu')) AS nama_tamu_kelas_kamar,");

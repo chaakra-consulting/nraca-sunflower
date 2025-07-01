@@ -23,6 +23,14 @@
 	                        </select>
 	                    </td>
                         <td>
+	                        <select class="form-control form-control-sm" name="acc_filter" style="width: 175px;">
+                            <option value="" <?php if($acc_filter == "") echo 'selected'; ?>>--Semua Akun--</option>
+                                    <?php foreach($acc_dropdown as $key => $acc){ ?>
+                                        <option value="<?php echo $key; ?>" <?php if($key == $acc_filter) echo 'selected'; ?>><?php echo $acc; ?></option>
+                                    <?php } ?>
+	                        </select>
+	                    </td>
+                        <td>
                             <button type="submit" name="search" class="btn btn-default" value="1"><i
                                     class="fa fa-search"></i> Filter</button>
                             <a href="#" name="print" class="btn btn-default"

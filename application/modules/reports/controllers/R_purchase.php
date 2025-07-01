@@ -13,10 +13,11 @@ class R_purchase extends MY_Controller {
 
     function index() {
         // Set default values for $start, $end, and $paid
-        $start = isset($_GET['start']) ? $_GET['start'] : date("Y-m-01");
+        $start = isset($_GET['start']) ? $_GET['start'] : date("Y-01-01");
         $end = isset($_GET['end']) ? $_GET['end'] : date("Y-m-d");
         $paid = isset($_GET['paid']) ? $_GET['paid'] : 'paid';
 		$status = $_GET['status'];
+        $acc_filter = $_GET['acc_filter'];
         
         // Check if 'start' and 'end' parameters are set
         if (!isset($_GET['start']) || !isset($_GET['end'])) {
@@ -58,10 +59,15 @@ class R_purchase extends MY_Controller {
         if ($status === "0" || $status === "1") {
 			$this->db->where("tj.status_pembayaran", $status);
 		}
+
+        if($acc_filter){
+			$this->db->where("tj.fid_coa", $acc_filter);
+		}
 		
 		$this->db->group_by("tj.id");
 		
         $purchase_report = $this->db->get()->result();
+        $acc_dropdown = $this->Master_Coa_Type_model->getCoaEntry();
 
         // Execute query using framework's database handler
         // $purchase_report = $this->db->query($sql);
@@ -70,7 +76,9 @@ class R_purchase extends MY_Controller {
         $view_data = array(
             'date_range' => $date_range,
             'purchase_report' => $purchase_report,
-            'status' => $status
+            'status' => $status,
+            'acc_filter' => $acc_filter,
+            'acc_dropdown' => $acc_dropdown
         );
 
         // Check if 'print' parameter is set

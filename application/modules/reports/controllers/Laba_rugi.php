@@ -32,6 +32,7 @@ class Laba_rugi extends MY_Controller {
 		$view_data['dapat_non_op'] = $this->Profitloss_model->getPendNonOp();
 		$view_data['data_biaya'] = $this->Profitloss_model->get_data_akun_biaya();
 		$view_data['data_biaya_other'] = $this->Profitloss_model->get_data_akun_biaya_other();
+        //print_r($view_data['data_beban_pokok']);exit;
 
         $view_data['data_project'] = $this->Master_Project_model->get_details();
         // $view_data['status'] = $status;
