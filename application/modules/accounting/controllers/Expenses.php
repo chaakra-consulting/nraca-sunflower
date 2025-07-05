@@ -77,7 +77,8 @@ class Expenses extends MY_Controller {
         $options = array(
             "id" => $id,
         );
-        $view_data['kas_dropdown'] = $this->Master_Coa_Type_model->getCashCoa();
+        //$view_data['kas_dropdown'] = $this->Master_Coa_Type_model->getCashCoa();
+        $view_data['kas_dropdown'] = $this->Master_Coa_Type_model->getCoaDrop('account_type','Kas/Bank');
         $view_data['project_dropdown'] = array(0 => "-") + $this->Master_Project_model->get_dropdown_list(array("project_name","company_name"));
 
         $view_data['model_info'] = $this->Expenses_header_model->get_details($options)->row();
@@ -290,6 +291,7 @@ class Expenses extends MY_Controller {
         $fid_header = $this->input->post('fid_header');
         $fid_coa = $this->input->post('fid_coa');
          $data = array(
+            "fid_coa" => $this->input->post('fid_coa'),
             "code" => $this->input->post('code'),
             "voucher_code" => $this->input->post('voucher_code'),
             "fid_project" => $this->input->post('fid_project'),
