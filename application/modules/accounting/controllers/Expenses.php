@@ -265,7 +265,10 @@ class Expenses extends MY_Controller {
     }
 
     function _triggerUpdateProject($fid_header,$fid_project = 0,$date){
-        $query = $this->db->query("UPDATE transaction_journal SET project_id = $fid_project,`date`='".$date."' WHERE fid_header = $fid_header ");
+        if ($fid_project == '' || $fid_project == null) {
+            $fid_project = 0;
+        }
+        $query = $this->db->query("UPDATE transaction_journal SET project_id = $fid_project,`date`= $date WHERE fid_header = $fid_header ");
         
         if($query == true){
             return true;
