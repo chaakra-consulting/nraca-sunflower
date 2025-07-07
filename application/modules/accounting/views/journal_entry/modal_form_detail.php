@@ -7,7 +7,20 @@
     <input type="hidden" name="date" value="<?php echo $info_header->date ?>">
     <div class="tab-content mt15">
         <div role="tabpanel" class="tab-pane active" id="general-info-tab">
-            
+            <div class="form-group" style="display: none;">
+                <label for="date" class=" col-md-3">Date</label>
+                <div class=" col-md-9">
+                    <?php
+                    echo form_input(array(
+                        "id" => "date",
+                        "name" => "date",
+                        "class" => "form-control",
+                        "placeholder" => 'Y-m-d',
+                        "value" => $info_header->date
+                    ));
+                    ?>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="fid_coa" class=" col-md-3"> Entry Accounts</label>
                 <div class=" col-md-9">
