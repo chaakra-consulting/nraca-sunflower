@@ -185,7 +185,7 @@ class Expenses extends MY_Controller {
 
         $save_id = $this->Expenses_model->save($data);
         if ($save_id) {
-            $this->_triggerUpdate($data_id,$fid_coa,$this->input->post('fid_project'));
+            // $this->_triggerUpdate($data_id,$fid_coa,$this->input->post('fid_project'));
             // $data = $this->db->query("SELECT SUM(debet) AS debet,fid_header FROM transaction_journal WHERE fid_header = $data_id AND deleted = 0 ")->row();
             // $this->db->query("UPDATE transaction_journal SET credit = $data->debet WHERE fid_header = $data->fid_header AND fid_coa = '$fid_coa' ");
             
@@ -233,7 +233,7 @@ class Expenses extends MY_Controller {
 
         $save_id = $this->Expenses_model->save($data,$data_id);
         if ($save_id) {
-            $this->_triggerUpdate($fid_header,$fid_coa);
+            // $this->_triggerUpdate($fid_header,$fid_coa);
 
             // $data = $this->db->query("SELECT SUM(debet) AS debet,fid_header FROM transaction_journal WHERE fid_header = $data_id AND deleted = 0 ")->row();
             // $this->db->query("UPDATE transaction_journal SET credit = $data->debet WHERE fid_header = $data->fid_header AND fid_coa = '$fid_coa' ");
@@ -244,23 +244,23 @@ class Expenses extends MY_Controller {
         }
     }
 
-     function _triggerUpdate($fid_header,$fid_coa){
+    //  function _triggerUpdate($fid_header,$fid_coa){
 
-        // $check = $this->db->query("SELECT * FROM transaction_journal WHERE fid_header = '$fid_header' AND fid_coa = '$fid_coa' ");
-        // if($check){
-        //     return false;
-        // }
-            $data = $this->db->query("SELECT SUM(a.debet) AS debet,a.fid_header,b.* FROM transaction_journal a JOIN transaction_journal_header b ON a.fid_header = b.id  WHERE a.fid_header = $fid_header AND a.deleted = 0 AND a.type = 'pengeluaran' ")->row();
+    //     // $check = $this->db->query("SELECT * FROM transaction_journal WHERE fid_header = '$fid_header' AND fid_coa = '$fid_coa' ");
+    //     // if($check){
+    //     //     return false;
+    //     // }
+    //         $data = $this->db->query("SELECT SUM(a.debet) AS debet,a.fid_header,b.* FROM transaction_journal a JOIN transaction_journal_header b ON a.fid_header = b.id  WHERE a.fid_header = $fid_header AND a.deleted = 0 AND a.type = 'pengeluaran' ")->row();
 
-                if($data == true){
-                    $query = $this->db->query("UPDATE transaction_journal SET credit = $data->debet WHERE fid_header = $data->fid_header AND fid_coa = $fid_coa ");
-                }
-            if($query == true){
-                return true;
-            }else{
-                return false;
-            }
-    }
+    //             if($data == true){
+    //                 $query = $this->db->query("UPDATE transaction_journal SET credit = $data->debet WHERE fid_header = $data->fid_header AND fid_coa = $fid_coa ");
+    //             }
+    //         if($query == true){
+    //             return true;
+    //         }else{
+    //             return false;
+    //         }
+    // }
 
     function _triggerUpdateProject($fid_header,$fid_project = 0,$date){
         if ($fid_project == '' || $fid_project == null) {
@@ -518,7 +518,7 @@ class Expenses extends MY_Controller {
     public function entry($id = 0,$fid_coa = 0){
         if($id){
             // echo $id;
-            $this->_triggerUpdate($id,$fid_coa);
+            // $this->_triggerUpdate($id,$fid_coa);
             // $project = $this->db->query("SELECT fid_project,date FROM transaction_journal_header WHERE id = '$id' ")->row();
             // $this->_triggerUpdateProject($id,$project->fid_project,$project->date);
             
