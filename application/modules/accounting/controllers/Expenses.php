@@ -183,9 +183,6 @@ class Expenses extends MY_Controller {
             "created_at" => get_current_utc_time()
         );
 
-
-        
-
         $save_id = $this->Expenses_model->save($data);
         if ($save_id) {
             $this->_triggerUpdate($data_id,$fid_coa,$this->input->post('fid_project'));
@@ -522,13 +519,10 @@ class Expenses extends MY_Controller {
         if($id){
             // echo $id;
             $this->_triggerUpdate($id,$fid_coa);
-            $project = $this->db->query("SELECT fid_project,date FROM transaction_journal_header WHERE id = '$id' ")->row();
-            $this->_triggerUpdateProject($id,$project->fid_project,$project->date);
+            // $project = $this->db->query("SELECT fid_project,date FROM transaction_journal_header WHERE id = '$id' ")->row();
+            // $this->_triggerUpdateProject($id,$project->fid_project,$project->date);
             
             $view_data['info_header'] = $this->Expenses_header_model->get_details(array("id" => $id))->row();
-            // print_r($view_data['info_header']);
-            // exit();
-            
             $view_data['info_coa'] = $this->Master_Coa_Type_model->get_details(array("id"=> $view_data['info_header']->fid_coa))->row();
             $view_data['kas_dropdown'] = $this->Master_Coa_Type_model->getCashCoa();
 
