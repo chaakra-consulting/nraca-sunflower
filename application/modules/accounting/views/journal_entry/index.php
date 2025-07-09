@@ -40,6 +40,8 @@ $(document).ready(function () {
     setDatePicker("#start");
     setDatePicker("#end");
 
+    const defaultSearch = '<?php echo addslashes($defaultSearch); ?>'; // Nilai pencarian default dari PHP
+
     const table = $("#expenses-table").appTable({
         source: '<?php echo_uri("accounting/journal_entry/list_data?start=" . $start . "&end=" . $end . "&acc_filter=" . $acc_filter) ?>',
         order: [[1, 'desc']],
@@ -57,6 +59,26 @@ $(document).ready(function () {
             start: $("#start").val(),
             end: $("#end").val(),
             status: $("#status").val()
+        },
+        onInitComplete: function () {
+            const dt = $('#expenses-table').DataTable();
+            dt.search(defaultSearch).draw();
+
+            // Tangkap event pencarian
+            dt.on('search.dt', function () {
+                const searchValue = dt.search();
+                $.ajax({
+                    url: '<?php echo_uri("accounting/journal_entry/save_search"); ?>',
+                    type: 'POST',
+                    data: { search: searchValue },
+                    success: function (response) {
+                        console.log('Search saved:', searchValue);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error saving search:', error);
+                    }
+                });
+            });
         }
     });
 
@@ -70,4 +92,4 @@ $(document).ready(function () {
         });
     });
 });
-</script>    
+</script>  

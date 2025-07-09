@@ -9,6 +9,7 @@ class Journal_entry extends MY_Controller {
         parent::__construct();
         $this->load->model("accounting/Journal_model");
         $this->load->model("accounting/Journal_header_model");
+        $this->load->library('session');
         //check permission to access this module
     }
 
@@ -18,6 +19,7 @@ class Journal_entry extends MY_Controller {
         $start = $this->input->get('start') ?: date("Y") . "-01-01";
         $end = $this->input->get('end') ?: date('Y-m-d');
 		$acc_filter = $_GET['acc_filter'];
+        $defaultSearch = $this->session->userdata('default_search') ?? '';
         // print_r($end);exit;
         
         $acc_dropdown = $this->Master_Coa_Type_model->getCoaEntry();
@@ -25,13 +27,22 @@ class Journal_entry extends MY_Controller {
             'start' => $start,
             'end' => $end,
             'acc_filter' => $acc_filter,
-            'acc_dropdown' => $acc_dropdown
+            'acc_dropdown' => $acc_dropdown,
+            'defaultSearch' => $defaultSearch,
         );
         // if($start && $end){
         // print_r($view_data);exit;
         // }
 
     	$this->template->rander('journal_entry/index',$view_data);
+    }
+
+    public function save_search() {
+        $search = $this->input->post('search');
+        
+        $this->session->set_userdata('default_search', $search);
+        
+        echo json_encode(['status' => 'success']);
     }
 
     function modal_form_import() {
@@ -239,16 +250,14 @@ class Journal_entry extends MY_Controller {
 
     function save() {
         $data_id = $this->input->post('id');
-
-
+    
         validate_submitted_data(array(
             "id" => 'numeric'
-            // "journal_code" => "required"
         ));
-
+    
         $fid_coa = $this->input->post('fid_coa');
-
-        if($this->input->post('jenis_entry') == "Penjualan Kamar"){
+    
+        if ($this->input->post('jenis_entry') == "Penjualan Kamar") {
             $json_data = array(
                 "jenis_entry" => $this->input->post('jenis_entry'),
                 "tipe_kamar" => $this->input->post('tipe_kamar'),
@@ -257,31 +266,36 @@ class Journal_entry extends MY_Controller {
                 "tanggal_datang" => $this->input->post('tanggal_datang'),
                 "tanggal_pergi" => $this->input->post('tanggal_pergi'),
             );
-        }else{
+        } else {
             $json_data = array(
                 "jenis_entry" => $this->input->post('jenis_entry'),
             );
         }
         
         $json_data_encoded = json_encode($json_data);
-
+    
         $data = array(
             "code" => $this->input->post('code'),
             "voucher_code" => $this->input->post('voucher_code'),
-            // "fid_coa" => $this->input->post('fid_coa'),
             "date" => $this->input->post('date'),
             "description" => $this->input->post('description'),
-            // "status_pembayaran" => $this->input->post('status_pembayaran'),
             "data" => $json_data_encoded,
         );
-
-
-        $save_id = $this->Journal_header_model->save($data,$data_id);
+    
+        $save_id = $this->Journal_header_model->save($data, $data_id);
         if ($save_id) {
-
-            echo json_encode(array("success" => true, "data" => $this->_row_data($save_id), 'id' => $data_id,'message' => lang('record_saved')));
+            $row_data = $this->_row_data($save_id);
+            echo json_encode(array(
+                "success" => true,
+                "data" => $row_data,
+                "id" => $save_id,
+                "message" => lang('record_saved')
+            ));
         } else {
-            echo json_encode(array("success" => false, 'message' => lang('error_occurred')));
+            echo json_encode(array(
+                "success" => false,
+                "message" => lang('error_occurred')
+            ));
         }
     }
 
@@ -434,7 +448,8 @@ class Journal_entry extends MY_Controller {
 
             if (empty($journals)) {
                 $this->session->set_flashdata('error', 'Data jurnal tidak ditemukan.');
-                redirect('accounting/journal_entry');
+                $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'accounting/journal_entry';
+                redirect($referer);
             }
 
             foreach ($journals as $j) {
@@ -442,7 +457,8 @@ class Journal_entry extends MY_Controller {
             }
 
             $this->session->set_flashdata('success', 'Status pembayaran berhasil diverifikasi.');
-            redirect('accounting/journal_entry');
+            $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'accounting/journal_entry';
+            redirect($referer);
         }
 
     // private function _make_row($data) {
