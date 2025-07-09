@@ -15,7 +15,23 @@ class Journal_entry extends MY_Controller {
     /* load clients list view */
 
     function index() {
-    	$this->template->rander('journal_entry/index');
+        $start = $this->input->get('start') ?: date("Y") . "-01-01";
+        $end = $this->input->get('end') ?: date('Y-m-d');
+		$acc_filter = $_GET['acc_filter'];
+        // print_r($end);exit;
+        
+        $acc_dropdown = $this->Master_Coa_Type_model->getCoaEntry();
+        $view_data = array(
+            'start' => $start,
+            'end' => $end,
+            'acc_filter' => $acc_filter,
+            'acc_dropdown' => $acc_dropdown
+        );
+        // if($start && $end){
+        // print_r($view_data);exit;
+        // }
+
+    	$this->template->rander('journal_entry/index',$view_data);
     }
 
     function modal_form_import() {
@@ -168,10 +184,7 @@ class Journal_entry extends MY_Controller {
             "username" => "admin",
             "created_at" => get_current_utc_time()
         );
-
-
         
-
         $save_id = $this->Journal_model->save($data);
         if ($save_id) {
             // $data = $this->db->query("SELECT SUM(debet) AS debet,fid_header FROM transaction_journal WHERE fid_header = $data_id AND deleted = 0 ")->row();
@@ -324,7 +337,18 @@ class Journal_entry extends MY_Controller {
 
     function list_data() {
 
-        $list_data = $this->Journal_header_model->get_details()->result();
+        $start = $this->input->get('start') ?: date("Y") . "-01-01";
+        $end = $this->input->get('end') ?: date('Y-m-d');
+		$acc_filter = $_GET['acc_filter'];
+        // else {
+		// 	header("Location:" . base_url() . "accounting/journal_entry?start=" . $start . "&end=" . $end);
+		// }
+        $options = array(
+            "start" => $start,
+            "end" => $end,
+            "acc_filter" => $acc_filter,
+        );
+        $list_data = $this->Journal_header_model->get_details($options)->result();
         $result = array();
         foreach ($list_data as $data) {
             $result[] = $this->_make_row($data);
@@ -351,6 +375,7 @@ class Journal_entry extends MY_Controller {
         $journals = $this->Journal_model->get_details(array('fid_header' => $data->id))->result();
         $show_verifikasi = false;
         foreach ($journals as $j) {
+            $total = $j->debet + $j->credit;
             if ($j->status_pembayaran == 0) {
                 $show_verifikasi = true;
                 break;
@@ -376,12 +401,13 @@ class Journal_entry extends MY_Controller {
         $code = $data->code ? anchor(get_uri('accounting/journal_entry/entry/').$data->id.'/'.$data->fid_coa, $data->code) : '-';
         $row_data = array(
             $code,
-            $data->voucher_code,
+            // $data->voucher_code,
             $newDate,
             $namaTamu,
             $tanggalDatang,
             $tanggalPergi,
             $data->description,
+            number_format(nsi_round($total), 0, 0, '.'),
             // $status_label // Add status column after description
         );
     
