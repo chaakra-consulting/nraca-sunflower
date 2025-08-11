@@ -43,8 +43,8 @@ class Dashboard extends MY_Controller
             $this->db->from("transaction_journal tj");
             $this->db->join("transaction_journal_header tjh", "tj.fid_header = tjh.id", "inner");
             $this->db->where("tj.type", "jurnal_umum");
-            $this->db->where("YEAR(tj.date)", $year);
-            $this->db->where("MONTH(tj.date)", $m);
+            $this->db->where("YEAR(tjh.date)", $year);
+            $this->db->where("MONTH(tjh.date)", $m);
             $this->db->where("tj.deleted", 0);
             $this->db->where("tjh.deleted", 0);
             if ($status === "0" || $status === "1") {
@@ -57,8 +57,8 @@ class Dashboard extends MY_Controller
             $this->db->from("transaction_journal tj");
             $this->db->join("transaction_journal_header tjh", "tj.fid_header = tjh.id", "inner");
             $this->db->where("tj.type", "pengeluaran");
-            $this->db->where("YEAR(tj.date)", $year);
-            $this->db->where("MONTH(tj.date)", $m);
+            $this->db->where("YEAR(tjh.date)", $year);
+            $this->db->where("MONTH(tjh.date)", $m);
             $this->db->where("tj.deleted", 0);
             $this->db->where("tjh.deleted", 0);
             if ($status === "0" || $status === "1") {

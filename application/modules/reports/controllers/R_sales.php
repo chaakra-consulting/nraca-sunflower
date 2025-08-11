@@ -16,6 +16,9 @@ class R_sales extends MY_Controller {
 		// Set default date range for the current year
 		$start = date("Y") . "-01-01";
 		$end = date("Y-m-d");
+		// $start = date("Y-m") . "-01";
+		// $end = date("Y-m-d");
+		$end = date('Y-m-t');
 		$status = $_GET['status'];
 		$acc_filter = $_GET['acc_filter'];
 
@@ -56,7 +59,7 @@ class R_sales extends MY_Controller {
 		$this->db->join("master_tipe_kamar mtk", "JSON_UNQUOTE(JSON_EXTRACT(tjh.data, '$.tipe_kamar')) = mtk.id", "left");
 		
 		$this->db->where("tj.type", "jurnal_umum");
-		$this->db->where("tj.date BETWEEN '$start' AND '$end'");
+		$this->db->where("tjh.date BETWEEN '$start' AND '$end'");
 		$this->db->where("tj.deleted", 0);
 		$this->db->where("tjh.deleted", 0);
 
