@@ -16,7 +16,7 @@ class Journal_entry extends MY_Controller {
     /* load clients list view */
 
     function index() {
-        $start = $this->input->get('start') ?: date("Y-m") . "-01";
+        $start = $this->input->get('start') ?: date("Y-m-d", strtotime("-1 month", strtotime(date("Y-m") . "-01")));
         $end = $this->input->get('end') ?: date('Y-m-t');
 		$acc_filter = $_GET['acc_filter'];
         $defaultSearch = $this->session->userdata('default_search') ?? '';
