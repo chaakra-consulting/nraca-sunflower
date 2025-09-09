@@ -199,17 +199,20 @@ class Profitloss_model extends CI_Model {
 		}	
 	function get_jml_akun($akun,$start,$end) {
 
-		$this->db->select('SUM(debet) AS jum_debet, SUM(credit) AS jum_kredit');
-		$this->db->from('transaction_journal');
-		$this->db->where('DATE(date) >=', $start);
-		$this->db->where('DATE(date) <=', $end);
-		$this->db->where('deleted', '0');
+		$this->db->select('SUM(tj.debet) AS jum_debet, SUM(tj.credit) AS jum_kredit');
+		$this->db->from('transaction_journal tj');
+		$this->db->join("transaction_journal_header tjh", "tj.fid_header = tjh.id", "inner");
+		// $this->db->where('DATE(date) >=', $start);
+		// $this->db->where('DATE(date) <=', $end);
+		$this->db->where("tjh.date BETWEEN '$start' AND '$end'");
+		$this->db->where('tj.deleted', '0');
+		$this->db->where('tjh.deleted', '0');
 	
 		if (!empty($akun)) {
 			if (is_array($akun)) {
-				$this->db->where_in('fid_coa', $akun);
+				$this->db->where_in('tj.fid_coa', $akun);
 			} else {
-				$this->db->where('fid_coa', $akun);
+				$this->db->where('tj.fid_coa', $akun);
 			}
 		}
 	
