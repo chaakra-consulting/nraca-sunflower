@@ -19,7 +19,7 @@ class Journal_model extends Crud_model {
         $join = "";
         
         if ($id) {
-            $where = " AND h.yyid=$id";
+            $where = " AND h.id=$id";
         }
         if ($fid_header) {
             $where = " AND h.fid_header=$fid_header";
