@@ -386,7 +386,7 @@ class Journal_entry extends MY_Controller {
         $originalDate = $data->date;
         $newDate = date("d M Y", strtotime($originalDate));
 
-        $journals = $this->Journal_model->get_details(array('fid_header' => $data->id))->result();
+        $journals = $this->Journal_model->get_details(array('fid_header' => $data->id, 'kamar_filter' => true))->result();
         $show_verifikasi = false;
         foreach ($journals as $j) {
             $total = $j->debet + $j->credit;

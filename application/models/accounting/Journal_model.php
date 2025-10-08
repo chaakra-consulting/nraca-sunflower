@@ -13,14 +13,28 @@ class Journal_model extends Crud_model {
     function get_details($options = array()){
         $id = get_array_value($options, "id");
         $fid_header = get_array_value($options, "fid_header");
+        $kamar_filter = get_array_value($options, "kamar_filter");
+
         $where = "";
+        $join = "";
+        
         if ($id) {
-            $where = " AND id=$id";
+            $where = " AND h.yyid=$id";
         }
         if ($fid_header) {
-            $where = " AND fid_header=$fid_header";
+            $where = " AND h.fid_header=$fid_header";
         }
-        $data = $this->db->query("SELECT * FROM $this->table WHERE type = 'jurnal_umum' $where AND  deleted = 0  ".$where." ORDER BY id DESC");
+        if ($kamar_filter) {
+            $join .= "JOIN acc_coa_type act ON act.id = h.fid_coa";
+            $where .= " AND act.account_number LIKE '41%'";
+        }
+        $data = $this->db->query("SELECT * 
+                                FROM $this->table h 
+                                $join 
+                                WHERE h.type = 'jurnal_umum' 
+                                AND  h.deleted = 0  "
+                                .$where." 
+                                ORDER BY h.id DESC");
         return $data;
     }
 
